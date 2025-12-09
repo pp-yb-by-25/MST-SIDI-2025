@@ -52,7 +52,7 @@ public class MyFile extends FileItem {
         {
             e.getMessage();
         }
-        return text;
+        return text.toString();
     }
 
 
