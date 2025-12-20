@@ -1,6 +1,8 @@
+// 20-12-2025
+
+
 package MODULE_1_JAVA.a_Notions_java;
 
-// 20-12-2025
 public class SalaireJournalier {
 
     private String nomSal;
