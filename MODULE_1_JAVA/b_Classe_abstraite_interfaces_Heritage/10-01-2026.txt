@@ -20,6 +20,7 @@ Skipped0
 upcasting : lors de l'instanciation de la classe mere : ( Forme f = new Cercle();)
 
 downsacting : lors de l appelle des methodes de la classe fille : ( ((Cercle) f).getRayon();  )
+               ou bien la creation d un nouvel objet comme ( Voiture v5 = (Voiture) v1;)
 
 
 ---------------------------------------------
