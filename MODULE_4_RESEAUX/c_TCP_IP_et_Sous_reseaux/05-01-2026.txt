@@ -111,3 +111,21 @@ Adresse de broadcast
 | **9. Première adresse utilisable**              | Adresse réseau + 1                              | Adresse réseau + 1                        | La première IP hôte                                |
 | **10. Dernière adresse utilisable**             | Broadcast − 1                                   | Broadcast − 1                             | Dernière IP hôte                                   |
 | **11. Adresse de broadcast**                    | Dernière adresse du bloc                        | Dernière adresse du bloc                  | Réseau complet = broadcast = fin du bloc           |
+
+
+
+
+
+
+Règles générales 
+
+-------------------------------------------------------------------------------
+hôtes       128      64       32     16     8          4           2          1
+--------------------------------------------------------------------------------
+masque      128     192      224    240     248        252      254         255
+--------------------------------------------------------------------------------
+1octet      /25      /26        /27     /28    /29      /30     /31        /32
+2octet      /17      /18        /19     /20    /21      /22     /23        /24
+3octet      /9       /10        /11     /12    /13      /14     /15        /16
+4octect     /1       /2         /3      /4     /5       /6      /7         /8
+--------------------------------------------------------------------------------
