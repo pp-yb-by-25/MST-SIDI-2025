@@ -377,15 +377,19 @@ class GraphApp:
         start = self.choisir_sommet("Départ BFS :")
         if start:
             edges = list(nx.bfs_edges(self.graph, start))
+            ordre_decouverte = [start] + [v for u, v in edges]
+            liste_str = " -> ".join(map(str, ordre_decouverte))
             self.dessiner_graphe(highlight_edges=edges)
-            self.journaliser("BFS", f"Parcours depuis {start}")
+            self.journaliser("BFS", f"Parcours depuis {start}"+f"\nOrdre découverte : {liste_str}")
 
     def run_dfs(self):
         start = self.choisir_sommet("Départ DFS :")
         if start:
             edges = list(nx.dfs_edges(self.graph, start))
+            ordre_visite = [start] + [v for u, v in edges]
+            chemin_str = " → ".join(map(str, ordre_visite))
             self.dessiner_graphe(highlight_edges=edges)
-            self.journaliser("DFS", f"Parcours depuis {start}")
+            self.journaliser("DFS", f"Parcours depuis {start}"+f"\nOrdre découverte : {chemin_str}")
 
     def run_ford(self):
         saisie = simpledialog.askstring("Ford-Fulkerson", "Source,Puits")

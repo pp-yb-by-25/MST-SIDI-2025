@@ -1,69 +1,319 @@
-EXAMEN COMPLET : TRAITEMENT DU SIGNAL (CHAPITRES 1 & 2)
-PARTIE I : FONDAMENTAUX ET CLASSIFICATION (THÉORIE)
-    A. Vrai ou Faux (Justifiez brièvement si faux)
-        1. Un signal transitoire est un signal non périodique dont le support temporel est borné. Vrai
-        2. L'énergie d'un signal périodique sur l'intervalle ]−∞,+∞[ est finie. 
-        3. Un signal échantillonné possède une amplitude continue et un temps discret.
-        4. La fonction sinus cardinal sinc(t) s'annule pour toutes les valeurs entières de t, sauf en t=0 où elle vaut 1.
-        5. L'impulsion de Dirac δ(t) est nulle partout sauf en t=0 où elle est infinie, et son intégrale vaut 1.
-        6. La fonction d'autocorrélation Cxx​(τ) est maximale à l'origine (τ=0).
-        7. Pour un signal réel, la fonction d'autocorrélation est impaire.
-        8. Un système est dit causal si sa réponse à l'instant t ne dépend que des entrées passées et présentes (h(t)=0 pour t<0).
-        9. Un système LTI est stable si sa réponse impulsionnelle est intégrable (condition de convergence).
-        10. En montage parallèle, la réponse impulsionnelle globale est le produit de convolution des réponses impulsionnelles individuelles.
+🟦 EXERCICE 1 — ÉNERGIE & PUISSANCE (signal réel)
+Énoncé
 
---------------------------------------------------------------------------------
-PARTIE II : CALCULS D'ÉNERGIE ET ANALYSE SPECTRALE
-    Exercice 1 : Énergie et Puissance Soit un signal x(t)=A⋅rect(t/τ).
-        1. Calculez l'énergie E de ce signal. Est-il à énergie finie ou à puissance moyenne finie ?
-        2. Si ce signal devient périodique de période T>τ, exprimez sa puissance moyenne P.
-    Exercice 2 : Transformée de Fourier et Spectres
-        1. Calculez la transformée de Fourier d'un signal cosinusoidal x(t)=Acos(2πf0​t). Dessinez son spectre.
-        2. Soit une fonction porte de largeur T0​. Quelle est sa transformée de Fourier X(f) ? Identifiez la position du premier zéro du spectre.
-        3. On considère un peigne de Dirac temporel de période Te​. Quelle est la forme de son spectre dans le domaine fréquentiel ?.
+Soit le signal :
 
---------------------------------------------------------------------------------
-PARTIE III : ÉCHANTILLONNAGE ET THÉORÈME DE SHANNON
-    Exercice 3 : Cas de calcul sur l'échantillonnage On considère un signal x(t) dont la fréquence maximale est Fmax​=12 kHz.
-        1. Condition de Shannon : Quelle est la fréquence d'échantillonnage minimale Fe​ requise pour éviter le repliement ?
-        2. Analyse de cas :
-            ◦ Si on choisit Fe​=20 kHz, sommes-nous en sur-échantillonnage ou sous-échantillonnage ? Le signal est-il récupérable ?.
-            ◦ Si Fe​=30 kHz, dessinez l'allure du spectre échantillonné Xe​(f) en montrant les motifs périodisés.
-        3. Échantillonnage Réel : Expliquez pourquoi l'échantillonnage réel par moyennage introduit une distorsion fréquentielle (terme H∗(f)).
+x(t)=3 rect(t2)
+x(t)=3rect(
+2
+t
+	​
 
---------------------------------------------------------------------------------
-PARTIE IV : SYSTÈMES LTI ET CONVOLUTION
-    Exercice 4 : Manipulation du produit de convolution
-        1. Élément neutre : Simplifiez l'expression y(t)=x(t)∗δ(t).
-        2. Translation : Calculez y(t)=x(t)∗δ(t−t0​). Quelle est l'interprétation physique de ce résultat ?
-        3. Calcul de sortie : Un système a une réponse impulsionnelle h(t)=δ(t)+δ(t−T). Si l'entrée est x(t), exprimez la sortie y(t).
-        4. Filtrage fréquentiel : Si l'entrée E(f) passe par un filtre H(f), quelle est la formule de la sortie S(f) ?.
-    Exercice 5 : Association de systèmes Deux systèmes h1​(t) et h2​(t) sont placés en série.
-        1. Donnez l'expression de la réponse impulsionnelle globale hserie​(t).
-        2. Si h1​(t)=δ(t−τ) et h2​(t)=δ(t−τ), quelle est la réponse globale du système ?
+)
 
---------------------------------------------------------------------------------
-PARTIE V : NUMÉRISATION (QUANTIFICATION ET CODAGE)
-    Exercice 6 : Calcul de résolution et pas de quantification On souhaite numériser un signal dont la tension varie entre −10V et +10V (Vmax​=10V).
-        1. CAN 8 bits : Calculez le pas de quantification q.
-        2. CAN 12 bits : Calculez le nouveau pas q. Laquelle de ces deux configurations offre la meilleure résolution ?.
-        3. Erreur : Si la tension d'entrée est de 3,015V et que le palier le plus proche est 3,000V, comment appelle-t-on la différence entre ces deux valeurs ?.
-    Exercice 7 : Techniques de codage
-        1. Codage Unipolaire : Donnez la formule reliant la tension V au code numérique D.
-        2. Code Binaire Signé : On utilise un mot de 4 bits (1 bit de signe + 3 bits de magnitude). Codez la valeur positive "+3" et la valeur négative "−3".
-        3. LSB et MSB : Définissez ces deux acronymes et leur importance dans un mot binaire.
+Représenter le signal
 
---------------------------------------------------------------------------------
-PARTIE VI : CORRÉLATION ET DÉTECTION
-    1. Cas pratique : On reçoit un signal y(t) qui contient un signal utile x(t) noyé dans un bruit b(t). Quelle fonction mathématique permet de détecter la présence de x(t) dans y(t) ?.
-    2. Lien Énergie/Corrélation : Montrez que la valeur de l'autocorrélation à l'origine Cxx​(0) est égale à l'énergie E du signal.
+Calculer son énergie
+
+Dire s’il est à énergie finie ou à puissance finie
+
+✅ Solution détaillée
+1️⃣ Représentation
+rect(t2)={1	∣t∣≤1
+0	sinon
+rect(
+2
+t
+	​
+
+)={
+1
+0
+	​
+
+∣t∣≤1
+sinon
+	​
 
 
+Donc :
 
---------------------------------------------------------------------------------
-Synthèse des Formules Clés à maîtriser pour l'examen :
-• Convolution : y(t)=∫x(τ)h(t−τ)dτ.
-• Shannon : Fe​≥2Fmax​.
-• Pas de quantification : q=2.Vmax​​./pow(2,n)
-• Spectre échantillonné : Xe​(f)=Fe​∑X(f−nFe​).
-• Stabilité LTI : ∫∣h(t)∣dt<∞
+x(t)=3pour t∈[−1,1]
+x(t)=3pour t∈[−1,1]
+2️⃣ Énergie
+E=∫−∞+∞∣x(t)∣2dt
+E=∫
+−∞
++∞
+	​
+
+∣x(t)∣
+2
+dt
+E=∫−1132dt
+E=∫
+−1
+1
+	​
+
+3
+2
+dt
+E=9×2=18
+E=9×2=18
+3️⃣ Conclusion
+
+✅ Énergie finie
+❌ Puissance moyenne nulle
+
+🟦 EXERCICE 2 — TRANSFORMÉE DE FOURIER (signal simple)
+Énoncé
+x(t)=2cos⁡(2π100t)
+x(t)=2cos(2π100t)
+
+Calculer sa transformée de Fourier
+
+Tracer le spectre
+
+✅ Solution détaillée
+1️⃣ Formule connue
+Acos⁡(2πf0t)⟺A2[δ(f−f0)+δ(f+f0)]
+Acos(2πf
+0
+	​
+
+t)⟺
+2
+A
+	​
+
+[δ(f−f
+0
+	​
+
+)+δ(f+f
+0
+	​
+
+)]
+
+Ici :
+
+A = 2
+
+f₀ = 100 Hz
+
+X(f)=δ(f−100)+δ(f+100)
+X(f)=δ(f−100)+δ(f+100)
+2️⃣ Spectre
+
+📍 Deux pics :
+
+à +100 Hz
+
+à −100 Hz
+
+🟦 EXERCICE 3 — TRANSFORMÉE DE FOURIER D’UNE PORTE
+Énoncé
+x(t)=rect(tT)
+x(t)=rect(
+T
+t
+	​
+
+)
+
+Calculer X(f)
+
+Donner la position du premier zéro
+
+✅ Solution
+X(f)=T sinc(fT)
+X(f)=Tsinc(fT)
+
+Zéros :
+
+f=±1T,±2T,...
+f=±
+T
+1
+	​
+
+,±
+T
+2
+	​
+
+,...
+
+➡️ Premier zéro :
+
+f=±1T
+f=±
+T
+1
+	​
+
+🟦 EXERCICE 4 — ÉCHANTILLONNAGE (Shannon)
+Énoncé
+
+Un signal x(t) a une fréquence maximale :
+
+Fmax=4 kHz
+F
+max
+	​
+
+=4kHz
+
+Calculer la fréquence minimale d’échantillonnage
+
+Que se passe-t-il si Fe = 6 kHz ?
+
+Que se passe-t-il si Fe = 10 kHz ?
+
+✅ Solution
+1️⃣ Shannon
+Fe≥2Fmax=8 kHz
+F
+e
+	​
+
+≥2F
+max
+	​
+
+=8kHz
+2️⃣ Fe = 6 kHz
+
+❌ Fe < 8 kHz
+➡️ Sous-échantillonnage
+➡️ Repliement spectral
+➡️ Signal non récupérable
+
+3️⃣ Fe = 10 kHz
+
+✅ Fe > 8 kHz
+➡️ Bonne reconstruction possible
+
+🟦 EXERCICE 5 — CONVOLUTION AVEC DIRAC
+Énoncé
+y(t)=x(t)∗δ(t−2)
+y(t)=x(t)∗δ(t−2)
+
+Calculer y(t)
+
+Interprétation physique
+
+✅ Solution
+1️⃣ Propriété
+x(t)∗δ(t−t0)=x(t−t0)
+x(t)∗δ(t−t
+0
+	​
+
+)=x(t−t
+0
+	​
+
+)
+
+Donc :
+
+y(t)=x(t−2)
+y(t)=x(t−2)
+2️⃣ Interprétation
+
+➡️ Décalage du signal de 2 secondes vers la droite
+
+🟦 EXERCICE 6 — CONVOLUTION ENTRE DEUX PORTES
+Énoncé
+x(t)=rect(t),h(t)=rect(t)
+x(t)=rect(t),h(t)=rect(t)
+
+Calculer :
+
+y(t)=x(t)∗h(t)
+y(t)=x(t)∗h(t)
+✅ Solution (idée clé)
+
+La convolution de deux portes donne :
+
+y(t)=triangle(t)
+y(t)=triangle(t)
+
+📐 Forme triangulaire
+
+maximale en t=0
+
+largeur double
+
+🟦 EXERCICE 7 — SYSTÈME LTI (écho)
+Énoncé
+h(t)=δ(t)+0.5 δ(t−1)
+h(t)=δ(t)+0.5δ(t−1)
+y(t)=x(t)∗h(t)
+y(t)=x(t)∗h(t)
+✅ Solution
+y(t)=x(t)+0.5 x(t−1)
+y(t)=x(t)+0.5x(t−1)
+
+➡️ Signal original + écho atténué
+
+🟦 EXERCICE 8 — CORRÉLATION
+Énoncé
+
+Soit x(t) un signal réel d’énergie E.
+
+Calculer Cxx(0)
+
+Interprétation
+
+✅ Solution
+Cxx(0)=∫∣x(t)∣2dt=E
+C
+xx
+	​
+
+(0)=∫∣x(t)∣
+2
+dt=E
+
+➡️ L’autocorrélation à l’origine = énergie
+
+🟦 EXERCICE 9 — NUMÉRISATION
+Énoncé
+
+Un CAN 8 bits, Vmax = 5V.
+
+Calculer le pas de quantification
+
+Donner l’erreur maximale
+
+✅ Solution
+q=2Vmax2n=10256=0.039V
+q=
+2
+n
+2V
+max
+	​
+
+	​
+
+=
+256
+10
+	​
+
+=0.039V
+
+Erreur max :
+
+±q2=0.0195V
+±
+2
+q
+	​
+
+=0.0195V
