@@ -1,9 +1,10 @@
+import re
 import subprocess
 import sys
 
 
 
-required_packages = ["networkx", "matplotlib", "fpdf"]
+required_packages = ["networkx", "matplotlib", "fpdf","re"]
 
 def installer_packages(packages):
     for package in packages:
@@ -148,7 +149,7 @@ class GraphApp:
     def __init__(self, root, user_name="BAHIDA YOUSSEF"):
         self.root = root
         self.user_name = user_name
-        self.root.title(f"Théorie des Graphes - MST-SIDI-2025 - ({self.user_name})")
+        self.root.title(f"Théorie des Graphes - MST-SIDI-TA-2025 - ({self.user_name})")
         self.root.geometry("1500x950")
         
         self.graph = nx.Graph()
@@ -165,7 +166,7 @@ class GraphApp:
         self.header_frame.pack(side="top", fill="x")
 
         self.label_user = tk.Label(self.header_frame, 
-                                text="BAHIDA YOUSSEF --- MST-SIDI-2025",
+                                text="BAHIDA YOUSSEF --- MST-SIDI-TA-2025",
                                 fg="#ff0000", bg="#ffffff", font=('Courier', 12, 'bold'))
         self.label_user.pack(pady=(6,0))
 
@@ -258,6 +259,11 @@ class GraphApp:
 
 
     # ---------------- FONCTIONS ----------------
+    def nettoyer_nom_fichier(nom):
+        # Supprime les sauts de ligne, les deux-points et les caractères spéciaux
+        nom = nom.replace("\n", "_").replace(":", "_")
+        # Ne garde que les lettres, chiffres, tirets et underscores
+        return re.sub(r'[^\w\-_\. ]', '_', nom)
     def creer_champ(self, parent, texte_label):
         tk.Label(parent, text=texte_label, fg="white", bg="#34495e", font=('Arial', 8)).pack()
         ent = tk.Entry(parent, width=15); ent.pack(pady=1); return ent
@@ -266,14 +272,32 @@ class GraphApp:
         path = f"temp_plots/plot_{nom}_{len(self.history_data)}.png"
         self.fig.savefig(path, bbox_inches='tight'); return path
 
+
     def journaliser(self, titre, contenu):
         horaire = datetime.datetime.now().strftime('%H:%M:%S')
+        
+        # 1. Nettoyage du titre pour le système de fichiers (Image)
+        # On enlève tout ce qui n'est pas lettre, chiffre ou underscore
+        titre_secu = re.sub(r'[^\w\-_]', '_', titre.strip())
+        
+        # 2. Formatage pour l'affichage (Zone de texte)
+        # On garde les \n ici car c'est pour l'affichage visuel uniquement
         format_text = f"\n[{horaire}] {titre.upper()}\n{contenu}\n{'-'*35}\n"
         self.zone_traitement.insert(tk.END, format_text)
         self.zone_traitement.see(tk.END)
-        img_path = self.capturer_image(titre.replace(" ", "_"))
-        self.history_data.append({'titre': titre, 'texte': contenu, 'image': img_path, 'heure': horaire})
-
+        
+        # 3. Capture de l'image avec le titre nettoyé
+        # On ajoute un timestamp pour éviter les doublons de noms de fichiers
+        nom_fichier = f"{titre_secu}_{datetime.datetime.now().strftime('%M%S')}"
+        img_path = self.capturer_image(nom_fichier)
+        
+        # 4. Sauvegarde dans l'historique
+        self.history_data.append({
+            'titre': titre, 
+            'texte': contenu, 
+            'image': img_path, 
+            'heure': horaire
+        })
     def changer_vue(self, vue):
         if vue == "traitement":
             self.zone_archives.pack_forget()
@@ -340,38 +364,106 @@ class GraphApp:
         colors = nx.coloring.greedy_color(self.graph, strategy='independent_set')
         node_colors = {n: self.palette[c % len(self.palette)] for n, c in colors.items()}
         self.dessiner_graphe(node_colors=node_colors)
-        self.journaliser("Coloration Gloutonne", f"Couleurs: {colors}")
+        self.journaliser("\n--Algorithme : Coloration Gloutonne---", f"Couleurs: \n{colors}")
 
     def run_welsh(self):
         if not self.graph.nodes: return
         colors = nx.coloring.greedy_color(self.graph, strategy='largest_first')
         node_colors = {n: self.palette[c % len(self.palette)] for n, c in colors.items()}
         self.dessiner_graphe(node_colors=node_colors)
-        self.journaliser("Welsh-Powell", f"Nb couleurs: {max(colors.values())+1}\n{colors}")
+        self.journaliser("\n---Algorithme : Welsh-Powell---", f"Nb couleurs: {max(colors.values())+1}\n\n{colors}")
 
     def run_prim(self):
-        start = self.choisir_sommet("Sommet de départ pour Prim :")
+        start = self.choisir_sommet("Départ :")
         if start:
-            comp = nx.node_connected_component(self.graph, start)
-            mst = nx.minimum_spanning_tree(self.graph.subgraph(comp), algorithm='prim')
-            self.dessiner_graphe(highlight_edges=list(mst.edges()))
-            self.journaliser("Prim", f"Racine: {start}\nPoids: {mst.size(weight='weight')}")
+            # 1. Calculer l'ACM (Arbre Couvrant Minimum)
+            mst_graph = nx.minimum_spanning_tree(self.graph, algorithm='prim')
+            
+            # 2. Lancer un BFS sur l'arbre de l'ACM uniquement
+            # Cela donne l'ordre de découverte "en largeur" au sein de l'arbre
+            edges_bfs_tree = list(nx.bfs_edges(mst_graph, start))
+            
+            # Reconstituer l'ordre des sommets à partir du BFS
+            ordre_decouverte = [start] + [v for u, v in edges_bfs_tree]
+            
+            # Préparer les arêtes pour le dessin (format (u, v))
+            edges_to_draw = [(u, v) for u, v in edges_bfs_tree]
+            
+            # Calcul du poids total (sur le graphe original)
+            poids_total = mst_graph.size(weight='weight')
+            
+            # Formater l'affichage (avec -> pour éviter les erreurs PDF)
+            ordre_str = " -> ".join(map(str, ordre_decouverte))
+            
+            # Action !
+            self.dessiner_graphe(highlight_edges=edges_to_draw)
+            self.journaliser("\n------ Algorithme : Prim ------",f"Poids: {poids_total}  \nOrdre en BFS de arbre couvrant minimal est :\n{ordre_str}")
 
     def run_kruskal(self):
-        if not self.graph.edges: return
+        if not self.graph.edges: 
+            return
+
+        # 1. Calcul de l'ACM
         mst = nx.minimum_spanning_tree(self.graph, algorithm='kruskal')
-        self.dessiner_graphe(highlight_edges=list(mst.edges()))
-        self.journaliser("Kruskal", f"Poids Total: {mst.size(weight='weight')}")
+        
+        # 2. Sécurité : On prend un point de départ sans bloquer l'interface
+        # On peut soit demander, soit prendre le premier nœud par défaut
+        nodes = list(mst.nodes())
+        start_node = nodes[0] if nodes else None
+        
+        if start_node is not None:
+            # 3. Parcours DFS sur l'arbre pour l'ordre
+            # On utilise list() pour s'assurer que le générateur est consommé
+            dfs_edges = list(nx.dfs_edges(mst, source=start_node))
+            ordre_dfs = [start_node] + [v for u, v in dfs_edges]
+            
+            # 4. Formatage propre (SANS flèche spéciale pour éviter le bug PDF)
+            ordre_str = " -> ".join(map(str, ordre_dfs))
+            poids_total = mst.size(weight='weight')
+
+            # 5. Mise à jour graphique
+            # On passe bien les arêtes de l'arbre (mst.edges)
+            self.dessiner_graphe(highlight_edges=list(mst.edges()))
+            
+            # 6. Journalisation
+            msg = f"\n------ Algorithme : Kruskal ------ \nPoids Total: {poids_total} \nArbre de recouvrement minimal en DFS est : \n{ordre_str}"
+            self.journaliser("Kruskal", msg)
 
     def run_dijkstra(self):
         saisie = simpledialog.askstring("Dijkstra", "Départ,Arrivée (ex: A,B)")
         if not saisie or "," not in saisie: return
+        
         try:
+            # 1. Extraction et nettoyage
             s, e = [x.strip() for x in saisie.split(",")]
-            path = nx.shortest_path(self.graph, s, e, weight='weight')
-            self.dessiner_graphe(highlight_edges=list(zip(path, path[1:])))
-            self.journaliser("Dijkstra", f"Chemin {s}->{e}: {path}")
-        except: messagebox.showerror("Erreur", "Chemin impossible")
+            
+            # Tentative de conversion en entier si les sommets sont des nombres
+            # (C'est souvent la cause du crash si on ne le fait pas)
+            nodes_list = list(self.graph.nodes)
+            if len(nodes_list) > 0 and isinstance(nodes_list[0], int):
+                s, e = int(s), int(e)
+
+            # 2. Calcul du chemin
+            path = nx.shortest_path(self.graph, source=s, target=e, weight='weight')
+            distance = nx.shortest_path_length(self.graph, source=s, target=e, weight='weight')
+            
+            # 3. Mise à jour graphique
+            edges_path = list(zip(path, path[1:]))
+            self.dessiner_graphe(highlight_edges=edges_path)
+            
+            # 4. Journalisation (on utilise "->" pour éviter le bug Unicode/PDF)
+            info_chemin = " -> ".join(map(str, path))
+            self.journaliser("\n------ Algorithme : Dijkstra ------ ", f"Chemin {s} vers {e} \nDistance: {distance} \nTrajet: {info_chemin}")
+
+        except nx.NetworkXNoPath:
+            messagebox.showerror("Erreur", "Aucun chemin n'existe entre ces sommets.")
+        except nx.NodeNotFound as err:
+            messagebox.showerror("Erreur", f"Sommet introuvable : {err}")
+        except Exception as e:
+            # Si ça arrive ici, on affiche la VRAIE erreur dans la console pour comprendre
+            print(f"Erreur interne : {e}")
+            # On ne met pas de messagebox ici pour l'instant pour ne pas polluer 
+            # si c'est juste un petit souci de log.
 
     def run_bfs(self):
         start = self.choisir_sommet("Départ BFS :")
@@ -380,17 +472,16 @@ class GraphApp:
             ordre_decouverte = [start] + [v for u, v in edges]
             liste_str = " -> ".join(map(str, ordre_decouverte))
             self.dessiner_graphe(highlight_edges=edges)
-            self.journaliser("BFS", f"Parcours depuis {start}"+f"\nOrdre découverte : {liste_str}")
+            self.journaliser("\n------ Algorithme : BFS ------", f"Parcours depuis {start}"+f"\nOrdre découverte: \n{liste_str}")
 
     def run_dfs(self):
         start = self.choisir_sommet("Départ DFS :")
         if start:
             edges = list(nx.dfs_edges(self.graph, start))
             ordre_visite = [start] + [v for u, v in edges]
-            chemin_str = " → ".join(map(str, ordre_visite))
+            chemin_str = " -> ".join(map(str, ordre_visite))
             self.dessiner_graphe(highlight_edges=edges)
-            self.journaliser("DFS", f"Parcours depuis {start}"+f"\nOrdre découverte : {chemin_str}")
-
+            self.journaliser("\n------ Algorithme : DFS ------", f"Parcours depuis {start}"+f"\nOrdre découverte: \n{chemin_str}")
     def run_ford(self):
         saisie = simpledialog.askstring("Ford-Fulkerson", "Source,Puits")
         if not saisie or "," not in saisie: return
@@ -399,7 +490,7 @@ class GraphApp:
             R = self.graph.to_directed()
             for u,v,d in R.edges(data=True): d['capacity'] = d.get('weight', 1.0)
             val, _ = nx.maximum_flow(R, s, t)
-            self.journaliser("Ford-Fulkerson", f"Flot Max {s}->{t} : {val}")
+            self.journaliser("\n--- Algorithme : Ford-Fulkerson ---", f"Flot Max {s}->{t} : {val}")
         except: pass
 
     # ---------------- AUTRES ----------------
