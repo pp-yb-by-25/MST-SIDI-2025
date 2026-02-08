@@ -42,7 +42,7 @@ public class Formulaire extends JFrame implements ActionListener {
                     //CNE 
                     JLabel cneP= new JLabel("CNE",SwingConstants.CENTER);
                     cneP.setOpaque(true);
-                    cneP.setBackground(Color.LIGHT_GRAY);
+                    cneP.setBackground(Color.MAGENTA);
                     cneP.setBounds(20,20,80,20);
                     tFcne = new JTextField(12);
                     tFcne.setBounds(120,20,150,21);
