@@ -243,7 +243,8 @@ public class SimulateurSalaire extends JFrame implements ActionListener
                         if(JOptionPane.showConfirmDialog(
                             this,
                             "Voulez-vous quitter",
-                            "Quitter",JOptionPane.YES_NO_OPTION,
+                            "Quitter",
+                            JOptionPane.YES_NO_OPTION,
                             JOptionPane.DEFAULT_OPTION,
                             (new ImageIcon(
                                 new ImageIcon(getClass().getResource("icones/iconexitt.gif")).getImage().
