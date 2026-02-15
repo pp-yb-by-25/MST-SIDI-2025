@@ -1,4 +1,4 @@
-# 🎓 Master SIDI - Modules et Projets
+# 🎓 SEMESTRE-1
 
 ![Repository](https://img.shields.io/badge/Repo-Master%20SIDI-blue)
 ![Commits](https://img.shields.io/badge/Commits-Frequent-brightgreen)
