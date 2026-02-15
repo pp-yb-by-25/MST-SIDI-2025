@@ -5,6 +5,17 @@
 Bienvenue dans le dépôt principal. Ce fichier centralise l'accès aux différents modules du Master SIDI par semestre. Cliquez sur les liens pour explorer le contenu détaillé de chaque branche.
 
 ---
+## 🔗 Accès Rapide aux Branches
+
+Cliquez sur les boutons ci-dessous pour naviguer vers le contenu spécifique de chaque semestre :
+
+[![S1](https://img.shields.io/badge/SEMESTRE_1-Fondamentaux-0078D4?style=for-the-badge&logo=git)](https://github.com/pp-yb-by-25/MST-SIDI-2025/tree/Semestre1)
+[![S2](https://img.shields.io/badge/SEMESTRE_2-Analyse_&_Sécurité-28A745?style=for-the-badge&logo=git)](https://github.com/pp-yb-by-25/MST-SIDI-2025/tree/Semestre2)
+[![S3](https://img.shields.io/badge/SEMESTRE_3-IA_&_Big_Data-FFD700?style=for-the-badge&logo=git)](https://github.com/pp-yb-by-25/MST-SIDI-2025/tree/Semestre3)
+[![S4](https://img.shields.io/badge/SEMESTRE_4-Spécialisation-DC3545?style=for-the-badge&logo=git)](https://github.com/pp-yb-by-25/MST-SIDI-2025/tree/Semestre4)
+
+---
+
 
 ## 🟦 [SEMESTRE 1 – Fondamentaux](https://github.com/TON_USER/Master-SIDI/tree/Semestre1)
 > "Les bases solides construisent les grandes carrières." 🚀
